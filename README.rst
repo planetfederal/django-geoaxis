@@ -10,7 +10,7 @@ requirements
 
 .. code-block::
 
-   pip install social-auth-app-django
+   pip install git+ssh://git@gitlab.devops.geointservices.io/boundlessgeo/django-geoaxis.git#egg=django_geoaxis
 
 
 local_settings.py (example)
