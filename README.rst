@@ -10,8 +10,7 @@ requirements
 
 .. code-block::
 
-   pip install git+ssh://git@gitlab.devops.geointservices.io/boundlessgeo/django-geoaxis.git#egg=django_geoaxis
-
+   pip install git+ssh://git@gitlab.devops.geointservices.io/boundlessgeo/storyscapes/django-geoaxis.git#egg=django_geoaxis
 
 local_settings.py (example)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
