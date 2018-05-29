@@ -10,7 +10,7 @@ requirements
 
 .. code-block::
 
-   pip install git+ssh://git@gitlab.devops.geointservices.io/boundlessgeo/storyscapes/django-geoaxis.git#egg=django_geoaxis
+   pip install git+ssh://git@github.com:boundlessgeo/django-geoaxis.git#egg=django_geoaxis
 
 local_settings.py (example)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -59,3 +59,14 @@ local_settings.py (example)
             'django_geoaxis.backends.geoaxis.GeoAxisOAuth2',
         )
 
+login template addition
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Add the following to your login template.
+
+.. code-block:: html
+
+   {% if ENABLE_GEOAXIS_LOGIN %}
+        <a class="btn-geoaxis btn-social btn bg-ms btn-block" href="{% url 'social:begin' 'geoaxis' %}?{{ redirect_field_name }}={{ redirect_field_value }}">
+            <i class="fa fa-lock"></i> Log In with GeoAxis
+        </a>
