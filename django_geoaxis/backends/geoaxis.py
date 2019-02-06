@@ -18,11 +18,15 @@
 #
 #########################################################################
 import base64
+import logging
+import json
 
 from social_core.backends.oauth import BaseOAuth2
 
 from django.conf import settings
 
+
+logger = logging.getLogger(__name__)
 
 class GeoAxisOAuth2(BaseOAuth2):
     """
@@ -56,18 +60,25 @@ class GeoAxisOAuth2(BaseOAuth2):
             'Authorization': "Basic %s" % b64Val}
 
     def get_user_id(self, details, response):
+        logger.debug("get_user_id=%s", details['uid'])
         return details['uid']
 
     def get_user_details(self, response):
         """Return user details from GeoAxis account"""
         fullname, first_name, last_name = self.get_user_names(
             '', response.get('firstname'), response.get('lastname'))
-        return {'username': response.get('username').lower(),
+        
+        user_details = {'username': response.get('username').lower(),
                 'email': response.get('email').lower(),
                 'fullname': fullname,
                 'first_name': first_name,
                 'last_name': last_name,
                 'uid': response.get('uid').lower()}
+
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug("get_user_details: %s", json.dumps(user_details))
+        
+        return user_details
 
     def user_data(self, access_token, *args, **kwargs):
         """Grab user profile information from GeoAxis.
@@ -95,4 +106,15 @@ class GeoAxisOAuth2(BaseOAuth2):
             'https://' + self.HOST + '/ms_oauth/resources/userprofile/me',
             params={'access_token': access_token},
             headers={'Authorization': access_token})
+        return response
+
+    def request(self, url, method='GET', *args, **kwargs):
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug("GeoAxisOAuth2 Request url: %s args: %s kwargs: %s", url, args, kwargs)        
+
+        response = super(GeoAxisOAuth2, self).request(url, method, *args, **kwargs)
+        
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug("GeoAxisOAuth2 Response: %s", response.text)
+
         return response
